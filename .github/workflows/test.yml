@@ -108,5 +108,9 @@ jobs:
             curl https://dl.google.com/go/go1.13.8.linux-s390x.tar.gz -o /tmp/go.tar.gz
             tar -C /usr/local -xzf /tmp/go.tar.gz
             export PATH="$PATH":/usr/local/go/bin
+            usermod -aG docker root
+            service docker start
+            sleep 60s
+            service docker status
             set -x
             cd $GITHUB_WORKSPACE/go/src/github.com/google/cadvisor && source build/config/plain.sh && make test-integration
