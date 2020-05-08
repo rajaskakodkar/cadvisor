@@ -1,77 +1,6 @@
 name: Test
 on: [push, pull_request]
 jobs:
-  lint:
-    env:
-      GOLANGCI_LINT_V: 1.26.0
-    strategy:
-      matrix:
-        environment-variables: [build/config/plain.sh, build/config/libpfm4.sh]
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.14
-    - name: Install golangci-lint
-      run: >
-        cd /tmp &&
-        mkdir -p $(go env GOPATH)/bin &&
-        wget -q https://github.com/golangci/golangci-lint/releases/download/v${GOLANGCI_LINT_V}/golangci-lint-${GOLANGCI_LINT_V}-linux-amd64.tar.gz &&
-        tar xf golangci-lint-${GOLANGCI_LINT_V}-linux-amd64.tar.gz &&
-        mv golangci-lint-${GOLANGCI_LINT_V}-linux-amd64/golangci-lint $(go env GOPATH)/bin &&
-        rm -fr golangci-lint-*
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Run golangci-lint
-      run: source ${{ matrix.environment-variables }} && make lint
-  test:
-    strategy:
-      matrix:
-        go-versions: [1.13, 1.14]
-        platform: [ubuntu-latest]
-        environment-variables: [build/config/plain.sh, build/config/libpfm4.sh]
-    runs-on: ${{ matrix.platform }}
-    timeout-minutes: 30
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: ${{ matrix.go-versions }}
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Run presubmit checks
-      run: GOFLAGS="$GO_FLAGS" make presubmit
-    - name: Run tests
-      env:
-        GOLANG_VERSION: ${{ matrix.go-versions }}
-      run: source ${{ matrix.environment-variables }} && make docker-test
-  test-integration:
-    strategy:
-      matrix:
-        go-versions: [1.13, 1.14]
-        platform: [ubuntu-latest]
-        environment-variables: [build/config/plain.sh, build/config/libpfm4.sh]
-    runs-on: ${{ matrix.platform }}
-    timeout-minutes: 30
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
-        path: go/src/github.com/google/cadvisor
-    - name: Run integration tests
-      env:
-        GOLANG_VERSION: ${{ matrix.go-versions }}
-      run: |
-        cd $GITHUB_WORKSPACE/go/src/github.com/google/cadvisor && source ${{ matrix.environment-variables }} && make docker-test-integration
-    - name: Upload cAdvisor log file
-      uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: cadvisor.log
-        path: ${{ github.workspace }}/go/src/github.com/google/cadvisor/cadvisor.log
   test-integration-s390x:
     runs-on: ubuntu-18.04
     name: Build on s390x
@@ -98,7 +27,8 @@ jobs:
             lsb-release \
             build-essential \
             git \
-            sudo
+            sudo \
+            glibc* 
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
             sudo add-apt-repository \
             "deb [arch=ppc64el] https://download.docker.com/linux/ubuntu \
