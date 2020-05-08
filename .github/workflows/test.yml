@@ -12,7 +12,7 @@ jobs:
           path: go/src/github.com/google/cadvisor
       - uses: rajaskakodkar/run-on-arch-action@qemu-version
         with:
-          architecture: ppc64le
+          architecture: s390x
           distribution: ubuntu18.04
           run: |
             set -euo pipefail
