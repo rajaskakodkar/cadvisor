@@ -27,11 +27,10 @@ jobs:
             lsb-release \
             build-essential \
             git \
-            sudo \
-            glibc* 
+            sudo 
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
             sudo add-apt-repository \
-            "deb [arch=ppc64el] https://download.docker.com/linux/ubuntu \
+            "deb [arch=s390x] https://download.docker.com/linux/ubuntu \
             $(lsb_release -cs) \
             stable"
             apt-get update
@@ -41,7 +40,6 @@ jobs:
             export PATH="$PATH":/usr/local/go/bin
             set -x
             cd $GITHUB_WORKSPACE/go/src/github.com/google/cadvisor 
-            docker ps
             docker run -d --name test k8s.gcr.io/pause:3.2
             docker ps
             docker rm -f test
