@@ -40,4 +40,9 @@ jobs:
             tar -C /usr/local -xzf /tmp/go.tar.gz
             export PATH="$PATH":/usr/local/go/bin
             set -x
-            cd $GITHUB_WORKSPACE/go/src/github.com/google/cadvisor && source build/config/plain.sh && make test-integration
+            cd $GITHUB_WORKSPACE/go/src/github.com/google/cadvisor 
+            docker ps
+            docker run -d --name test k8s.gcr.io/pause:3.2
+            docker ps
+            docker rm -f test
+            docker ps
