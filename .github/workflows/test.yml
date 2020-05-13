@@ -84,7 +84,7 @@ jobs:
       - name: Enable running multiple architectures
         run: |
           sudo docker run --rm --privileged linuxkit/binfmt:4ea3b9b0938cbd19834c096aa31ff475cc75d281
-      - uses: uraimo/run-on-arch-action@v1.0.9
+      - uses: rajaskakodkar/run-on-arch-action@qemu-version
         with:
           architecture: s390x
           distribution: ubuntu18.04
@@ -108,7 +108,6 @@ jobs:
                $(lsb_release -cs) stable"
             apt-get update
             apt-cache madison docker-ce
-            echo 1 > /proc/sys/vm/allocate_pgste
             cat /usr/sbin/policy-rc.d 
             printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
             cat /usr/sbin/policy-rc.d 
