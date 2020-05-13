@@ -108,6 +108,7 @@ jobs:
                $(lsb_release -cs) stable"
             apt-get update
             apt-cache madison docker-ce
+            echo 1 > /proc/sys/vm/allocate_pgste
             cat /usr/sbin/policy-rc.d 
             printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
             cat /usr/sbin/policy-rc.d 
