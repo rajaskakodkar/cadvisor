@@ -108,12 +108,9 @@ jobs:
                $(lsb_release -cs) stable"
             apt-get update
             apt-cache madison docker-ce
-            cat /usr/sbin/policy-rc.d 
-            printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
-            cat /usr/sbin/policy-rc.d 
-            export RUNLEVEL=1
-            init 1
             apt-get install -y --no-install-recommends docker-ce=18.06.*
+            mkdir /etc/docker
+            printf '{"iptables": false,"ip-masq": false,"bridge": "none" }' > /etc/docker/daemon.json
             service docker start
             sleep 60s
             service docker status
