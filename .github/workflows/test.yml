@@ -110,7 +110,7 @@ jobs:
             apt-cache madison docker-ce
             apt-get install -y --no-install-recommends docker-ce=18.06.*
             mkdir /etc/docker
-            printf '{"iptables": false,"ip-masq": false,"bridge": "none","storage-driver":"devicemapper" }' > /etc/docker/daemon.json
+            printf '{"iptables": false,"ip-masq": false,"bridge": "none","data-root":"/home/root" }' > /etc/docker/daemon.json
             service docker start
             sleep 60s
             service docker status
