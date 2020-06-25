@@ -112,7 +112,7 @@ jobs:
             mkdir /etc/docker
             printf '{"iptables": false,"ip-masq": false,"bridge": "none","data-root":"/home/root" }' > /etc/docker/daemon.json
             service docker start
-            sleep 60s
+            sleep 50s
             service docker status
             curl https://dl.google.com/go/go1.13.8.linux-s390x.tar.gz -o /tmp/go.tar.gz
             tar -C /usr/local -xzf /tmp/go.tar.gz
